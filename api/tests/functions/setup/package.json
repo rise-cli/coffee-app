@@ -1,0 +1,6 @@
+{
+    "dependencies": {
+        "aws-foundation": "^0.0.12",
+        "axios": "^0.25.0"
+    }
+}
