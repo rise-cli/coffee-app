@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'coffee-api-pipeline',
+    name: 'coffee-app-pipeline',
     stages: [
         {
             name: 'Source',
