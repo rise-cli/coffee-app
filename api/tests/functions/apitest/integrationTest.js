@@ -6,7 +6,7 @@ const TEST_PASS = 'sm-Pass100'
 const TEST_STORE = 'blue'
 const POOL_ID = process.env.USERPOOL_ID
 const CLIENT_ID = process.env.USERPOOL_CLIENT_ID
-const URL = 'https://8d1zof5ua7.execute-api.us-east-1.amazonaws.com/'
+const URL = process.env.URL
 
 async function login() {
     const userExists = await aws.default.cognito.getUser({
