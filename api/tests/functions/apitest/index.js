@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const { handler } = require('./integrationTest.js')
 
-module.exports.handler = async (event, context) => {
+module.exports.handler = function (event, context) {
     /**
      * Setup
      */
@@ -28,14 +28,11 @@ module.exports.handler = async (event, context) => {
         return message
     }
 
-    /**
-     * Test
-     */
-    try {
-        // Tests go here...
-        await handler()
-        return await putJobSuccess('Tests passed.')
-    } catch (e) {
-        return await putJobFailure(e)
-    }
+    handler()
+        .then(() => {
+            putJobSuccess('Tests passed.')
+        })
+        .catch((e) => {
+            putJobFailure(e)
+        })
 }
