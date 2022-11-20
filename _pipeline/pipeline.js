@@ -66,6 +66,13 @@ module.exports = {
                     },
                     inputArtifact: 'sourceZip',
                     outputArtifact: 'prodCanaryBuildZip'
+                },
+                {
+                    type: 'BUILD',
+                    name: 'deployDashboards',
+                    script: '/deployDashboards.yml',
+                    inputArtifact: 'sourceZip',
+                    outputArtifact: 'prodDashboardBuildZip'
                 }
             ]
         }

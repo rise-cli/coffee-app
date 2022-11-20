@@ -15,8 +15,8 @@
 
 -   E2E Setup Lambda
 
-    -   🔲 createUser if not exist
-    -   🔲 login as manager and get jwt
+    -   ✅ createUser if not exist
+    -   ✅ login as manager and get jwt
 
 -   E2E Store Management Test Lambda
 
@@ -29,10 +29,10 @@
 
 ## Dashboard
 
--   🔲 Traffic
--   🔲 Availabilty
--   🔲 Errors
--   🔲 Canaries
+-   ✅ Traffic
+-   ✅ Availabilty
+-   ✅ Errors
+-   ✅ Canaries
 -   🔲 Pipeline
 
 ## Alarms
@@ -42,8 +42,8 @@
 ## CICD
 
 -   ✅ Repo is setup
--   🔲 Pipeline is setup
--   🔲 Delpoys to QA
--   🔲 Tests run as approval step in QA
--   🔲 Delpoys to PROD
--   🔲 Tests as a canary every 5 min in PROD
+-   ✅ Pipeline is setup
+-   ✅ Delpoys to QA
+-   ✅ Tests run as approval step in QA
+-   ✅ Delpoys to PROD
+-   ✅ Tests as a canary every 5 min in PROD

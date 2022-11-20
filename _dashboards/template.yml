@@ -1,0 +1,179 @@
+Resources:
+    Dashboard:
+        Type: AWS::CloudWatch::Dashboard
+        Properties:
+            DashboardName: 'CoffeeServiceDashboard'
+            DashboardBody: |-
+                {
+                  "widgets": [
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 0,
+                          "x": 0,
+                          "type": "text",
+                          "properties": {
+                              "markdown": "## API \nParagraphs about something\n\n#### Availability\n- Long Impact SLA of > 99.9% is based on 15 minute time period\n- Short impact SLA of > 95% is based on 5 minute time period\n\n",
+                              "background": "solid"
+                          }
+                      },
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 0,
+                          "x": 18,
+                          "type": "metric",
+                          "properties": {
+                              "metrics": [
+                                  [ "AWS/ApiGateway", "Count", "ApiId", "8d1zof5ua7" ]
+                              ],
+                              "view": "timeSeries",
+                              "stacked": false,
+                              "region": "us-east-1",
+                              "stat": "Sum",
+                              "period": 300,
+                              "title": "Requests"
+                          }
+                      },
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 0,
+                          "x": 12,
+                          "type": "metric",
+                          "properties": {
+                              "metrics": [
+                                  [ "AWS/ApiGateway", "Latency", "ApiId", "8d1zof5ua7" ]
+                              ],
+                              "view": "timeSeries",
+                              "stacked": false,
+                              "region": "us-east-1",
+                              "stat": "p99",
+                              "period": 300,
+                              "title": "Latency",
+                              "annotations": {
+                                  "horizontal": [
+                                      {
+                                          "label": "Concern",
+                                          "value": 1000
+                                      },
+                                      {
+                                          "color": "#2ca02c",
+                                          "label": "Goal",
+                                          "value": 200
+                                      }
+                                  ]
+                              }
+                          }
+                      },
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 0,
+                          "x": 6,
+                          "type": "metric",
+                          "properties": {
+                              "metrics": [
+                                  [ "AWS/ApiGateway", "5xx", "ApiId", "8d1zof5ua7", { "label": "errors", "id": "errors", "visible": false } ],
+                                  [ ".", "Count", ".", ".", { "label": "invocations", "id": "invocations", "visible": false } ],
+                                  [ { "expression": "100 - 100 * errors / MAX([errors, invocations])", "label": "Success rate (%)", "id": "availability", "yAxis": "left", "region": "us-east-1" } ]
+                              ],
+                              "view": "timeSeries",
+                              "stacked": false,
+                              "region": "us-east-1",
+                              "stat": "Sum",
+                              "period": 300,
+                              "title": "Availability",
+                              "annotations": {
+                                  "horizontal": [
+                                      {
+                                          "label": "Long Impact SLA",
+                                          "value": 99
+                                      },
+                                      {
+                                          "label": "Short Impact SLA",
+                                          "value": 95
+                                      }
+                                  ]
+                              }
+                          }
+                      },
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 6,
+                          "x": 18,
+                          "type": "metric",
+                          "properties": {
+                              "period": 60,
+                              "metrics": [
+                                  [ "AWS/Lambda", "Invocations", "FunctionName", "coffeeApiCanary-apitest-prod", { "stat": "Sum" } ]
+                              ],
+                              "region": "us-east-1",
+                              "title": "Canary Traffic",
+                              "start": "-PT3H",
+                              "end": "P0D",
+                              "view": "timeSeries",
+                              "stacked": false
+                          }
+                      },
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 6,
+                          "x": 6,
+                          "type": "metric",
+                          "properties": {
+                              "period": 60,
+                              "metrics": [
+                                  [ "AWS/Lambda", "Errors", "FunctionName", "coffeeApiCanary-apitest-prod", { "id": "errors", "stat": "Sum", "color": "#d13212" } ],
+                                  [ ".", "Invocations", ".", ".", { "id": "invocations", "stat": "Sum", "visible": false } ],
+                                  [ { "expression": "100 - 100 * errors / MAX([errors, invocations])", "label": "Success rate (%)", "id": "availability", "yAxis": "right", "region": "us-east-1" } ]
+                              ],
+                              "region": "us-east-1",
+                              "title": "Canary error / success rate(%)",
+                              "yAxis": {
+                                  "right": {
+                                      "max": 100
+                                  }
+                              },
+                              "start": "-PT3H",
+                              "end": "P0D",
+                              "view": "timeSeries",
+                              "stacked": false
+                          }
+                      },
+                      {
+                          "type": "metric",
+                          "x": 12,
+                          "y": 6,
+                          "width": 6,
+                          "height": 6,
+                          "properties": {
+                              "period": 60,
+                              "metrics": [
+                                  [ "AWS/Lambda", "Duration", "FunctionName", "coffeeApiCanary-apitest-prod", { "stat": "Minimum" } ],
+                                  [ "...", { "stat": "Average" } ],
+                                  [ "...", { "stat": "Maximum" } ]
+                              ],
+                              "region": "us-east-1",
+                              "start": "-PT3H",
+                              "end": "P0D",
+                              "view": "timeSeries",
+                              "stacked": false,
+                              "title": "Canary Duration"
+                          }
+                      },
+                      {
+                          "height": 6,
+                          "width": 6,
+                          "y": 6,
+                          "x": 0,
+                          "type": "text",
+                          "properties": {
+                              "markdown": "## Canary \nParagraphs about something\n\n",
+                              "background": "solid"
+                          }
+                      }
+                  ]
+                }
