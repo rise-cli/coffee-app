@@ -1,29 +1,21 @@
 const AWS = require('aws-sdk')
 const { handler } = require('./integrationTest.js')
 
-module.exports.handler = function (event, context) {
+module.exports.handler = async (event, context) => {
     /**
      * Setup
      */
     const codepipeline = new AWS.CodePipeline()
     const jobId = event['CodePipeline.job'].id
-    const putJobSuccess = (message) => {
+    const putJobSuccess = async (message) => {
         const params = {
             jobId: jobId
         }
-        console.log('PASS 2')
-        codepipeline.putJobSuccessResult(params, function (err, data) {
-            if (err) {
-                console.log('PASS 2 - Fail')
-                context.fail(err)
-            } else {
-                console.log('PASS 2 - Pass')
-                context.succeed(message)
-            }
-        })
+        await codepipeline.putJobSuccessResult(params).promise()
+        return message
     }
 
-    const putJobFailure = (message) => {
+    const putJobFailure = async (message) => {
         const params = {
             jobId: jobId,
             failureDetails: {
@@ -32,20 +24,18 @@ module.exports.handler = function (event, context) {
                 externalExecutionId: context.awsRequestId
             }
         }
-        console.log('FAIL 2')
-        codepipeline.putJobFailureResult(params, function (err, data) {
-            console.log('FAIL 3')
-            context.fail(message)
-        })
+        await codepipeline.putJobFailureResult(params)
+        return message
     }
 
-    handler()
-        .then(() => {
-            console.log('PASS')
-            putJobSuccess('Tests passed.')
-        })
-        .catch((e) => {
-            console.log('FAIL')
-            putJobFailure(e)
-        })
+    /**
+     * Test
+     */
+    try {
+        // Tests go here...
+        await handler()
+        return await putJobSuccess('Tests passed.')
+    } catch (e) {
+        return await putJobFailure(e)
+    }
 }

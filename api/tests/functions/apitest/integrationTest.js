@@ -57,28 +57,37 @@ async function risePost(jwt, data) {
 
 module.exports.handler = async () => {
     const jwt = await login()
-    try {
-        await risePost(jwt, {
-            action: 'createStore',
-            input: {
-                name: 'blue'
-            }
-        })
-        const result = await risePost(jwt, {
-            action: 'listStores',
-            input: {}
-        })
-        console.log('>>> ', result.data)
-        await risePost(jwt, {
-            action: 'removeStore',
-            input: {
-                name: 'blue'
-            }
-        })
-        return {
-            status: 'success'
+
+    await risePost(jwt, {
+        action: 'createStore',
+        input: {
+            name: 'blue'
         }
-    } catch (e) {
-        console.log('THE ERR: ', e)
+    })
+    const result = await risePost(jwt, {
+        action: 'listStores',
+        input: {}
+    })
+
+    if (result.data.length !== 1) {
+        throw new Error('store was not created')
+    }
+
+    await risePost(jwt, {
+        action: 'removeStore',
+        input: {
+            name: 'blue'
+        }
+    })
+    const result2 = await risePost(jwt, {
+        action: 'listStores',
+        input: {}
+    })
+
+    if (result2.data.length !== 0) {
+        throw new Error('store was not deleted')
+    }
+    return {
+        status: 'success'
     }
 }

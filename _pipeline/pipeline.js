@@ -39,7 +39,7 @@ module.exports = {
                 {
                     type: 'INVOKE',
                     name: 'runTests',
-                    functionName: 'coffeeApiCanary-apitest-qa',
+                    functionName: 'coffeeApiTests-apitest-qa',
                     stage: 'us-east-1'
                 }
             ]
