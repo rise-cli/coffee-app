@@ -17,4 +17,9 @@ module.exports.config = {
     //     durationAlarm: 10,
     //     durationGoal: 2
     // }
+    env: {
+        URL: '{@output.coffeeApiqa.ApiUrl}',
+        USERPOOL_ID: '{@output.coffeeApiqa.UserPoolId}',
+        USERPOOL_CLIENT_ID: '{@output.coffeeApiqa.UserPoolClientId}'
+    }
 }

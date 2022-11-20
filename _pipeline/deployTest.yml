@@ -6,9 +6,6 @@ phases:
 
     build:
         commands:
-            - npm i -g risecli
             - npm i -g rise-functions
-            - cd ./api/app
-            - rise-api deploy --stage=${STAGE}
             - cd ../tests
             - rise-functions deploy --stage=${STAGE}

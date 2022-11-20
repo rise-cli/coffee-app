@@ -18,13 +18,23 @@ module.exports = {
             actions: [
                 {
                     type: 'BUILD',
-                    name: 'build',
-                    script: '/build.yml',
+                    name: 'deployApp',
+                    script: '/deployApp.yml',
                     env: {
                         STAGE: 'qa'
                     },
                     inputArtifact: 'sourceZip',
                     outputArtifact: 'qaBuildZip'
+                },
+                {
+                    type: 'BUILD',
+                    name: 'deployTest',
+                    script: '/deployTest.yml',
+                    env: {
+                        STAGE: 'qa'
+                    },
+                    inputArtifact: 'sourceZip',
+                    outputArtifact: 'qaTestBuildZip'
                 }
             ]
         },

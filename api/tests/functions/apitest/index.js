@@ -75,6 +75,9 @@ module.exports.handler = async () => {
                 name: 'blue'
             }
         })
+        return {
+            status: 'success'
+        }
     } catch (e) {
         console.log('THE ERR: ', e)
     }
