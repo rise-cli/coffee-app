@@ -1,44 +1,23 @@
 module.exports = {
     api: {
-        listStores: [
+        listEmployees: [
+            {
+                type: 'input',
+                storeName: 'string'
+            },
+            {
+                type: 'guard',
+                pk: 'store_{$storeName}',
+                sk: 'manager_{!id}'
+            },
             {
                 type: 'add',
-                pk: 'stores',
-                sk: 'store_'
+                pk: 'store_{$storeName}',
+                sk: 'employee_'
             },
             {
                 type: 'db',
                 action: 'list'
-            }
-        ],
-        createStore: [
-            {
-                type: 'input',
-                name: 'string'
-            },
-            {
-                type: 'add',
-                pk: 'stores',
-                sk: 'store_{$name}'
-            },
-            {
-                type: 'db',
-                action: 'set'
-            }
-        ],
-        removeStore: [
-            {
-                type: 'input',
-                name: 'string'
-            },
-            {
-                type: 'add',
-                pk: 'stores',
-                sk: 'store_{$name}'
-            },
-            {
-                type: 'db',
-                action: 'remove'
             }
         ],
 
@@ -95,57 +74,98 @@ module.exports = {
                     tempPass: '$password'
                 }
             }
-        ],
-        setProduct: [
-            {
-                type: 'input',
-                storeName: 'string',
-                productName: 'string',
-                price: 'number',
-                img: 'string'
-            },
-            {
-                type: 'guard',
-                pk: 'store_{$storeId}',
-                sk: 'manager_{!id}'
-            },
-
-            {
-                type: 'db',
-                action: 'set',
-                input: {
-                    pk: 'store_{$storeName}',
-                    sk: 'product_{$productName}',
-                    storeName: '$storeName',
-                    productName: '$productName',
-                    price: '$price',
-                    img: '$img'
-                }
-            }
-        ],
-        removeProduct: [
-            {
-                type: 'input',
-                storeName: 'string',
-                productName: 'string'
-            },
-            {
-                type: 'guard',
-                pk: 'store_{$storeId}',
-                sk: 'manager_{!id}'
-            },
-
-            {
-                type: 'db',
-                action: 'set',
-                input: {
-                    pk: 'store_{$storeName}',
-                    sk: 'product_{$productName}'
-                }
-            }
         ]
+        // setProduct: [
+        //     {
+        //         type: 'input',
+        //         storeName: 'string',
+        //         productName: 'string',
+        //         price: 'number',
+        //         img: 'string'
+        //     },
+        //     {
+        //         type: 'guard',
+        //         pk: 'store_{$storeId}',
+        //         sk: 'manager_{!id}'
+        //     },
+
+        //     {
+        //         type: 'db',
+        //         action: 'set',
+        //         input: {
+        //             pk: 'store_{$storeName}',
+        //             sk: 'product_{$productName}',
+        //             storeName: '$storeName',
+        //             productName: '$productName',
+        //             price: '$price',
+        //             img: '$img'
+        //         }
+        //     }
+        // ],
+        // removeProduct: [
+        //     {
+        //         type: 'input',
+        //         storeName: 'string',
+        //         productName: 'string'
+        //     },
+        //     {
+        //         type: 'guard',
+        //         pk: 'store_{$storeId}',
+        //         sk: 'manager_{!id}'
+        //     },
+
+        //     {
+        //         type: 'db',
+        //         action: 'set',
+        //         input: {
+        //             pk: 'store_{$storeName}',
+        //             sk: 'product_{$productName}'
+        //         }
+        //     }
+        // ]
     },
     events: {
+        createStore: [
+            {
+                type: 'event-source',
+                source: 'admin',
+                event: 'createStoreRequested'
+            },
+            {
+                type: 'input',
+                name: 'string'
+            },
+            {
+                type: 'add',
+                pk: 'stores',
+                sk: 'store_{$name}'
+            },
+            {
+                type: 'db',
+                action: 'set'
+            }
+        ],
+        removeStore: [
+            {
+                type: 'event-source',
+                source: 'admin',
+                event: 'removeStoreRequested'
+            },
+            {
+                type: 'input',
+                name: 'string'
+            },
+            {
+                type: 'add',
+                pk: 'stores',
+                sk: 'store_{$name}'
+            },
+            {
+                type: 'db',
+                action: 'remove'
+            }
+        ],
+
         createManager: [
             {
                 type: 'event-source',

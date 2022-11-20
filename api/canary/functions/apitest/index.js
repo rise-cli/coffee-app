@@ -1,12 +1,14 @@
 const aws = require('aws-foundation')
 const axios = require('axios')
+const awssdk = require('aws-sdk')
 
 const TEST_USER = 'sm-test@example.com'
 const TEST_PASS = 'sm-Pass100'
 const TEST_STORE = 'blue'
+const TABLE = 'coffeeApiprodtable'
 const POOL_ID = process.env.USERPOOL_ID
 const CLIENT_ID = process.env.USERPOOL_CLIENT_ID
-const URL = 'https://8d1zof5ua7.execute-api.us-east-1.amazonaws.com/'
+const URL = process.env.URL
 
 async function login() {
     const userExists = await aws.default.cognito.getUser({
@@ -55,30 +57,80 @@ async function risePost(jwt, data) {
     })
 }
 
+async function setupStoreData(storeName, managerId) {
+    const dynamoDb = new awssdk.DynamoDB.DocumentClient({
+        region: process.env.REGION || 'us-east-1'
+    })
+
+    await dynamoDb
+        .get({
+            TableName: TABLE,
+            Item: {
+                pk: `store_${storeName}`,
+                sk: `manager_${managerId}`
+            }
+        })
+        .promise()
+    await dynamoDb
+        .get({
+            TableName: TABLE,
+            Item: {
+                pk: `stores`,
+                sk: `store_${storeName}`
+            }
+        })
+        .promise()
+}
+
+function parseJwt(token) {
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
+}
+
 module.exports.handler = async () => {
     const jwt = await login()
-    try {
-        await risePost(jwt, {
-            action: 'createStore',
-            input: {
-                name: 'blue'
-            }
-        })
-        const result = await risePost(jwt, {
-            action: 'listStores',
-            input: {}
-        })
-        console.log('>>> ', result.data)
-        await risePost(jwt, {
-            action: 'removeStore',
-            input: {
-                name: 'blue'
-            }
-        })
-        return {
-            status: 'success'
+
+    const managerId = parseJwt(jwt).sub
+    await setupStoreData(TEST_STORE, managerId)
+
+    /**
+     * Create, List, Remove Employee test
+     */
+    await risePost(jwt, {
+        action: 'createEmployee',
+        input: {
+            storeName: TEST_STORE,
+            email: 'employee@example.com'
         }
-    } catch (e) {
-        console.log('THE ERR: ', e)
+    })
+    const result = await risePost(jwt, {
+        action: 'listEmployees',
+        input: {
+            storeName: TEST_STORE
+        }
+    })
+
+    if (result.data.length !== 1) {
+        throw new Error('employee was not created')
+    }
+
+    await risePost(jwt, {
+        action: 'removeEmployee',
+        input: {
+            storeName: TEST_STORE,
+            email: 'employee@example.com'
+        }
+    })
+    const result2 = await risePost(jwt, {
+        action: 'listEmployees',
+        input: {
+            storeName: TEST_STORE
+        }
+    })
+
+    if (result2.data.length !== 0) {
+        throw new Error('employee was not deleted')
+    }
+    return {
+        status: 'success'
     }
 }

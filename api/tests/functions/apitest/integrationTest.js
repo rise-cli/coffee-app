@@ -1,9 +1,11 @@
 const aws = require('aws-foundation')
+const awssdk = require('aws-sdk')
 const axios = require('axios')
 
 const TEST_USER = 'sm-test@example.com'
 const TEST_PASS = 'sm-Pass100'
 const TEST_STORE = 'blue'
+const TABLE = 'coffeeApiqatable'
 const POOL_ID = process.env.USERPOOL_ID
 const CLIENT_ID = process.env.USERPOOL_CLIENT_ID
 const URL = process.env.URL
@@ -55,37 +57,78 @@ async function risePost(jwt, data) {
     })
 }
 
+async function setupStoreData(storeName, managerId) {
+    const dynamoDb = new awssdk.DynamoDB.DocumentClient({
+        region: process.env.REGION || 'us-east-1'
+    })
+
+    await dynamoDb
+        .get({
+            TableName: TABLE,
+            Item: {
+                pk: `store_${storeName}`,
+                sk: `manager_${managerId}`
+            }
+        })
+        .promise()
+    await dynamoDb
+        .get({
+            TableName: TABLE,
+            Item: {
+                pk: `stores`,
+                sk: `store_${storeName}`
+            }
+        })
+        .promise()
+}
+
+function parseJwt(token) {
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
+}
+
 module.exports.handler = async () => {
     const jwt = await login()
 
+    const managerId = parseJwt(jwt).sub
+    await setupStoreData(TEST_STORE, managerId)
+
+    /**
+     * Create, List, Remove Employee test
+     */
     await risePost(jwt, {
-        action: 'createStore',
+        action: 'createEmployee',
         input: {
-            name: 'blue'
+            storeName: TEST_STORE,
+            email: 'employee@example.com'
         }
     })
     const result = await risePost(jwt, {
-        action: 'listStores',
-        input: {}
+        action: 'listEmployees',
+        input: {
+            storeName: TEST_STORE
+        }
     })
 
     if (result.data.length !== 1) {
-        throw new Error('store was not created')
+        throw new Error('employee was not created')
     }
 
     await risePost(jwt, {
-        action: 'removeStore',
+        action: 'removeEmployee',
         input: {
-            name: 'blue'
+            storeName: TEST_STORE,
+            email: 'employee@example.com'
         }
     })
     const result2 = await risePost(jwt, {
-        action: 'listStores',
-        input: {}
+        action: 'listEmployees',
+        input: {
+            storeName: TEST_STORE
+        }
     })
 
     if (result2.data.length !== 0) {
-        throw new Error('store was not deleted')
+        throw new Error('employee was not deleted')
     }
     return {
         status: 'success'

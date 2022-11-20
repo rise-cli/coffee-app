@@ -2,14 +2,18 @@
 
 ## Functionality
 
--   🔲 createStore
--   🔲 createEmployee
--   🔲 createProduct
--   🔲 updateProduct
--   🔲 removeProduct
--   🔲 getStoresProducts
--   🔲 removeEmployee
--   🔲 removeStore
+-   ✅ EB -> createStore
+-   ✅ EB -> removeStore
+-   ✅ EB -> createStoreManager
+-   ✅ EB -> removeStoreManager
+
+-   ✅ API -> createEmployee
+-   ✅ API -> removeEmployee
+-   ✅ API -> listEmployees
+
+-   🔲 API -> setProduct
+-   🔲 API -> removeProduct
+-   🔲 API -> listProducts
 
 ## Tests
 
