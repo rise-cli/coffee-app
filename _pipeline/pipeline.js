@@ -28,13 +28,19 @@ module.exports = {
                 },
                 {
                     type: 'BUILD',
-                    name: 'deployTest',
+                    name: 'deployTests',
                     script: '/deployTest.yml',
                     env: {
                         STAGE: 'qa'
                     },
                     inputArtifact: 'sourceZip',
                     outputArtifact: 'qaTestBuildZip'
+                },
+                {
+                    type: 'INVOKE',
+                    name: 'runTests',
+                    functionName: 'coffeeApiCanary-apitest-qa',
+                    stage: 'us-east-1'
                 }
             ]
         },
