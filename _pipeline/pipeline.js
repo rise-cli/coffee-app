@@ -43,8 +43,8 @@ module.exports = {
             actions: [
                 {
                     type: 'BUILD',
-                    name: 'build',
-                    script: '/build.yml',
+                    name: 'deployApp',
+                    script: '/deployApp.yml',
                     env: {
                         STAGE: 'prod'
                     },

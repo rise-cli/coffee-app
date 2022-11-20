@@ -7,5 +7,5 @@ phases:
     build:
         commands:
             - npm i -g rise-functions
-            - cd ../tests
+            - cd ./api/tests
             - rise-functions deploy --stage=${STAGE}
