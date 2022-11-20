@@ -29,7 +29,7 @@ module.exports = {
             },
             {
                 type: 'guard',
-                pk: 'store_{$storeId}',
+                pk: 'store_{$storeName}',
                 sk: 'manager_{!id}'
             },
 
@@ -42,7 +42,7 @@ module.exports = {
                 type: 'db',
                 action: 'set',
                 input: {
-                    pk: 'store_{$storeId}',
+                    pk: 'store_{$storeName}',
                     sk: 'employee_{$userId}',
                     tempPass: '$password'
                 }
@@ -57,7 +57,7 @@ module.exports = {
             },
             {
                 type: 'guard',
-                pk: 'store_{$storeId}',
+                pk: 'store_{$storeName}',
                 sk: 'manager_{!id}'
             },
             {
@@ -69,7 +69,7 @@ module.exports = {
                 type: 'db',
                 action: 'remove',
                 input: {
-                    pk: 'store_{$storeId}',
+                    pk: 'store_{$storeName}',
                     sk: 'employee_{$userId}',
                     tempPass: '$password'
                 }
