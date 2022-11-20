@@ -50,23 +50,18 @@ module.exports = {
                     },
                     inputArtifact: 'sourceZip',
                     outputArtifact: 'prodBuildZip'
+                },
+                {
+                    type: 'BUILD',
+                    name: 'deployCanary',
+                    script: '/deployCanary.yml',
+                    env: {
+                        STAGE: 'prod'
+                    },
+                    inputArtifact: 'sourceZip',
+                    outputArtifact: 'prodCanaryBuildZip'
                 }
             ]
         }
-        // {
-        //     name: 'PROD',
-        //     actions: [
-        //         {
-        //             type: 'BUILD',
-        //             name: 'publish',
-        //             script: '/publish.yml',
-        //             env: {
-        //                 NPM_TOKEN: '@secret.NPM_KEY'
-        //             },
-        //             inputArtifact: 'sourceZip',
-        //             outputArtifact: 'publishedZip'
-        //         }
-        //     ]
-        // }
     ]
 }

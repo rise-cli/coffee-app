@@ -41,35 +41,7 @@ module.exports = {
                 action: 'remove'
             }
         ],
-        createManager: [
-            {
-                type: 'input',
-                storeName: 'string',
-                email: 'string'
-            },
-            {
-                type: 'user',
-                action: 'add',
-                email: '$email'
-            },
-            {
-                type: 'db',
-                action: 'set',
-                input: {
-                    pk: 'store_{$storeId}',
-                    sk: 'manager_{$userId}'
-                }
-            },
-            {
-                type: 'db',
-                action: 'set',
-                input: {
-                    pk: 'store_{$storeId}',
-                    sk: 'employee_{$userId}',
-                    tempPass: '$password'
-                }
-            }
-        ],
+
         createEmployee: [
             {
                 type: 'input',
@@ -77,6 +49,12 @@ module.exports = {
                 email: 'string'
             },
             {
+                type: 'guard',
+                pk: 'store_{$storeId}',
+                sk: 'manager_{!id}'
+            },
+
+            {
                 type: 'user',
                 action: 'add',
                 email: '$email'
@@ -91,40 +69,17 @@ module.exports = {
                 }
             }
         ],
-        removeManager: [
-            {
-                type: 'input',
-                storeName: 'string',
-                email: 'string'
-            },
-            {
-                type: 'user',
-                action: 'remove',
-                email: '$email'
-            },
-            {
-                type: 'db',
-                action: 'remove',
-                input: {
-                    pk: 'store_{$storeId}',
-                    sk: 'manager_{$userId}'
-                }
-            },
-            {
-                type: 'db',
-                action: 'remove',
-                input: {
-                    pk: 'store_{$storeId}',
-                    sk: 'employee_{$userId}',
-                    tempPass: '$password'
-                }
-            }
-        ],
+
         removeEmployee: [
             {
                 type: 'input',
                 storeName: 'string',
                 email: 'string'
+            },
+            {
+                type: 'guard',
+                pk: 'store_{$storeId}',
+                sk: 'manager_{!id}'
             },
             {
                 type: 'user',
@@ -186,6 +141,76 @@ module.exports = {
                 input: {
                     pk: 'store_{$storeName}',
                     sk: 'product_{$productName}'
+                }
+            }
+        ]
+    },
+    events: {
+        createManager: [
+            {
+                type: 'event-source',
+                source: 'admin',
+                event: 'createManagerRequested'
+            },
+            {
+                type: 'input',
+                storeName: 'string',
+                email: 'string'
+            },
+            {
+                type: 'user',
+                action: 'add',
+                email: '$email'
+            },
+            {
+                type: 'db',
+                action: 'set',
+                input: {
+                    pk: 'store_{$storeId}',
+                    sk: 'manager_{$userId}'
+                }
+            },
+            {
+                type: 'db',
+                action: 'set',
+                input: {
+                    pk: 'store_{$storeId}',
+                    sk: 'employee_{$userId}',
+                    tempPass: '$password'
+                }
+            }
+        ],
+        removeManager: [
+            {
+                type: 'event-source',
+                source: 'admin',
+                event: 'removeManagerRequested'
+            },
+            {
+                type: 'input',
+                storeName: 'string',
+                email: 'string'
+            },
+            {
+                type: 'user',
+                action: 'remove',
+                email: '$email'
+            },
+            {
+                type: 'db',
+                action: 'remove',
+                input: {
+                    pk: 'store_{$storeId}',
+                    sk: 'manager_{$userId}'
+                }
+            },
+            {
+                type: 'db',
+                action: 'remove',
+                input: {
+                    pk: 'store_{$storeId}',
+                    sk: 'employee_{$userId}',
+                    tempPass: '$password'
                 }
             }
         ]
