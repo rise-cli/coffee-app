@@ -63,7 +63,7 @@ async function setupStoreData(storeName, managerId) {
     })
 
     await dynamoDb
-        .get({
+        .put({
             TableName: TABLE,
             Item: {
                 pk: `store_${storeName}`,
@@ -72,7 +72,7 @@ async function setupStoreData(storeName, managerId) {
         })
         .promise()
     await dynamoDb
-        .get({
+        .put({
             TableName: TABLE,
             Item: {
                 pk: `stores`,
