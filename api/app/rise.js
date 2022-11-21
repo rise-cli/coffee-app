@@ -85,7 +85,7 @@ module.exports = {
             },
             {
                 type: 'guard',
-                pk: 'store_{$storeId}',
+                pk: 'store_{$storeName}',
                 sk: 'manager_{!id}'
             },
             {
@@ -109,7 +109,7 @@ module.exports = {
             },
             {
                 type: 'guard',
-                pk: 'store_{$storeId}',
+                pk: 'store_{$storeName}',
                 sk: 'manager_{!id}'
             },
 
