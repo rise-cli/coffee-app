@@ -74,55 +74,69 @@ module.exports = {
                     tempPass: '$password'
                 }
             }
+        ],
+        setProduct: [
+            {
+                type: 'input',
+                storeName: 'string',
+                productName: 'string',
+                price: 'number',
+                img: 'string'
+            },
+            {
+                type: 'guard',
+                pk: 'store_{$storeId}',
+                sk: 'manager_{!id}'
+            },
+            {
+                type: 'db',
+                action: 'set',
+                input: {
+                    pk: 'store_{$storeName}',
+                    sk: 'product_{$productName}',
+                    storeName: '$storeName',
+                    productName: '$productName',
+                    price: '$price',
+                    img: '$img'
+                }
+            }
+        ],
+        removeProduct: [
+            {
+                type: 'input',
+                storeName: 'string',
+                productName: 'string'
+            },
+            {
+                type: 'guard',
+                pk: 'store_{$storeId}',
+                sk: 'manager_{!id}'
+            },
+
+            {
+                type: 'db',
+                action: 'set',
+                input: {
+                    pk: 'store_{$storeName}',
+                    sk: 'product_{$productName}'
+                }
+            }
+        ],
+        listProducts: [
+            {
+                type: 'input',
+                storeName: 'string'
+            },
+            {
+                type: 'add',
+                pk: 'store_{$storeName}',
+                sk: 'product_'
+            },
+            {
+                type: 'db',
+                action: 'list'
+            }
         ]
-        // setProduct: [
-        //     {
-        //         type: 'input',
-        //         storeName: 'string',
-        //         productName: 'string',
-        //         price: 'number',
-        //         img: 'string'
-        //     },
-        //     {
-        //         type: 'guard',
-        //         pk: 'store_{$storeId}',
-        //         sk: 'manager_{!id}'
-        //     },
-
-        //     {
-        //         type: 'db',
-        //         action: 'set',
-        //         input: {
-        //             pk: 'store_{$storeName}',
-        //             sk: 'product_{$productName}',
-        //             storeName: '$storeName',
-        //             productName: '$productName',
-        //             price: '$price',
-        //             img: '$img'
-        //         }
-        //     }
-        // ],
-        // removeProduct: [
-        //     {
-        //         type: 'input',
-        //         storeName: 'string',
-        //         productName: 'string'
-        //     },
-        //     {
-        //         type: 'guard',
-        //         pk: 'store_{$storeId}',
-        //         sk: 'manager_{!id}'
-        //     },
-
-        //     {
-        //         type: 'db',
-        //         action: 'set',
-        //         input: {
-        //             pk: 'store_{$storeName}',
-        //             sk: 'product_{$productName}'
-        //         }
-        //     }
-        // ]
     },
     events: {
         createStore: [

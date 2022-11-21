@@ -11,15 +11,16 @@
 -   ✅ API -> removeEmployee
 -   ✅ API -> listEmployees
 
--   🔲 API -> setProduct
--   🔲 API -> removeProduct
--   🔲 API -> listProducts
+-   ✅ API -> setProduct
+-   ✅ API -> removeProduct
+-   ✅ API -> listProducts
 
 ## Tests
 
 -   E2E Setup Lambda
 
     -   ✅ createUser if not exist
+    -   ✅ createStore if not exist
     -   ✅ login as manager and get jwt
 
 -   E2E Store Management Test Lambda

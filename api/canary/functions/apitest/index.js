@@ -130,6 +130,47 @@ module.exports.handler = async () => {
     if (result2.data.length !== 0) {
         throw new Error('employee was not deleted')
     }
+    /**
+     * Create, List, Remove products test
+     */
+    await risePost(jwt, {
+        action: 'setProduct',
+        input: {
+            storeName: TEST_STORE,
+            productName: 'coffee',
+            price: 300,
+            img: 'placeholder'
+        }
+    })
+    const productResult = await risePost(jwt, {
+        action: 'listProducts',
+        input: {
+            storeName: TEST_STORE
+        }
+    })
+
+    if (productResult.data.length !== 1) {
+        throw new Error('product was not created')
+    }
+
+    await risePost(jwt, {
+        action: 'removeProduct',
+        input: {
+            storeName: TEST_STORE,
+            productName: 'coffee'
+        }
+    })
+    const productResult2 = await risePost(jwt, {
+        action: 'listProducts',
+        input: {
+            storeName: TEST_STORE
+        }
+    })
+
+    if (productResult2.data.length !== 0) {
+        throw new Error('product was not deleted')
+    }
+
     return {
         status: 'success'
     }
