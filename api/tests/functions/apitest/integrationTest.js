@@ -104,13 +104,15 @@ module.exports.handler = async () => {
     /**
      * Create, List, Remove Employee test
      */
-    await risePost(jwt, {
+    const xx = await risePost(jwt, {
         action: 'createEmployee',
         input: {
             storeName: TEST_STORE,
             email: 'employee@example.com'
         }
     })
+
+    console.log('>>> ', xx)
     const result = await risePost(jwt, {
         action: 'listEmployees',
         input: {
