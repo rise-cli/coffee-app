@@ -115,7 +115,7 @@ module.exports = {
 
             {
                 type: 'db',
-                action: 'set',
+                action: 'remove',
                 input: {
                     pk: 'store_{$storeName}',
                     sk: 'product_{$productName}'
