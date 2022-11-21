@@ -75,6 +75,15 @@ async function setupStoreData(storeName, managerId) {
         .put({
             TableName: TABLE,
             Item: {
+                pk: `store_${storeName}`,
+                sk: `employee_${managerId}`
+            }
+        })
+        .promise()
+    await dynamoDb
+        .put({
+            TableName: TABLE,
+            Item: {
                 pk: `stores`,
                 sk: `store_${storeName}`
             }
